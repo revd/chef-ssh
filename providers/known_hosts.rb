@@ -15,7 +15,7 @@ action :add do
       action :create
       owner  new_resource.user if new_resource.user
       group  new_resource.group if new_resource.group
-      mode   new_resource.user ? 0o0700 : 0o0755
+      mode   new_resource.user ? '0700' : '0755'
     end
 
     file new_resource.path do
@@ -28,7 +28,7 @@ action :add do
     execute "add known_host entry for #{new_resource.host}" do
       command "echo '#{new_resource.key}' >> #{new_resource.path}"
       user    new_resource.user if new_resource.user
-      umask   new_resource.user ? 0o077 : 0o022
+      umask   new_resource.user ? '077' : '022'
     end
   end
 end
@@ -38,7 +38,7 @@ action :remove do
   execute "remove known_host entry for #{new_resource.host}" do
     command "ssh-keygen -R #{Shellwords.escape(new_resource.host)} -f #{new_resource.path}"
     user    new_resource.user if new_resource.user
-    umask   new_resource.user ? 0o077 : 0o022
+    umask   new_resource.user ? '077' : '022'
   end
 end
 
